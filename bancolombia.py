@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 import random
 from datetime import datetime
 import os
+import pytz
 from states import BANCOLOMBIA_NUMBER, BANCOLOMBIA_AMOUNT
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,15 @@ async def amount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     # Generar los textos
     comprobante_no = f"Comprobante No. {random.randint(10000, 99999):010d}"
-    fecha_actual = datetime.now().strftime('%d %b %Y - %I:%M %p').upper().replace('AM', 'a.m.').replace('PM', 'p.m.')
+    
+    # Define la zona horaria de Colombia
+    colombia_tz = pytz.timezone('America/Bogota')
+
+    # Obtén la hora actual en la zona horaria de Colombia
+    now = datetime.now(colombia_tz)
+
+    # Formatea la fecha y hora
+    fecha_actual = now.strftime('%d %b %Y - %I:%M %p').upper().replace('AM', 'a.m.').replace('PM', 'p.m.')
 
     # Traducción de meses al español
     meses = {
@@ -41,6 +50,8 @@ async def amount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         "MAY": "May", "JUN": "Jun", "JUL": "Jul", "AUG": "Ago",
         "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dic"
     }
+
+    # Reemplaza los meses en inglés con los equivalentes en español
     for eng, esp in meses.items():
         fecha_actual = fecha_actual.replace(eng, esp)
 

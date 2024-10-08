@@ -6,6 +6,7 @@ import random
 from datetime import datetime
 import os
 from states import NEQUI_MENU, NEQUI_NAME, NEQUI_NUMBER, NEQUI_AMOUNT, NEQUI_COMERCIO_NAME, NEQUI_COMERCIO_AMOUNT
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -49,8 +50,12 @@ async def amount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     # Generar referencia
     context.user_data['reference'] = f"M{random.randint(10000000, 15000000)}"
     
-    # Obtener fecha y hora actual en formato deseado
-    now = datetime.now()
+    # Define la zona horaria de Colombia
+    colombia_tz = pytz.timezone('America/Bogota')
+
+    # Obtén la hora actual en la zona horaria de Colombia
+    now = datetime.now(colombia_tz)
+
     months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
     day = now.day
     current_datetime = now.strftime(f'{day} de {months[now.month - 1]} de %Y, %I:%M %p').lower().replace('am', 'a. m.').replace('pm', 'p. m.')
@@ -141,8 +146,14 @@ async def comercio_amount(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     # Generar referencia
     reference = f"M{random.randint(5000000, 7000000)}"
     
-    # Obtener fecha y hora actual en formato deseado
-    now = datetime.now()
+
+    # Define la zona horaria de Colombia
+    colombia_tz = pytz.timezone('America/Bogota')
+
+
+    # Obtén la hora actual en la zona horaria de Colombia
+    now = datetime.now(colombia_tz)
+
     months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
     day = now.day
     month = months[now.month - 1]
