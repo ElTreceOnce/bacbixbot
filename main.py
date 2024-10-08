@@ -6,6 +6,7 @@ from nequi import nequi, nequi_a_nequi, nequi_a_comercio, name as nequi_name, nu
 from bancolombia import bancol_a_nequi, number as bancol_number, amount as bancol_amount, cancel as bancol_cancel
 from states import NEQUI_MENU, NEQUI_NAME, NEQUI_NUMBER, NEQUI_AMOUNT, NEQUI_COMERCIO_NAME, NEQUI_COMERCIO_AMOUNT, BANCOLOMBIA_NUMBER, BANCOLOMBIA_AMOUNT
 
+# Obtiene el token del bot desde las variables de entorno
 TOKEN = os.getenv("TOKEN")
 
 logging.basicConfig(
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Función inicial para el comando /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    logger.info("Start command received")
+    logger.info("Comando /start recibido")
     
     # Aquí se crean los dos botones: 'Nequi' y 'Bancol a Nequi'
     keyboard = [
@@ -27,9 +28,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Se agrega el teclado con los botones al mensaje de bienvenida
     reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
     await update.message.reply_text('Selecciona una opción:', reply_markup=reply_markup)
+    logger.info("Opciones enviadas al usuario")
 
 if __name__ == '__main__':
-    logger.info("Starting bot")
+    logger.info("Iniciando el bot")
     application = ApplicationBuilder().token(TOKEN).build()
 
     # Manejador para el comando /start
@@ -50,6 +52,7 @@ if __name__ == '__main__':
             NEQUI_COMERCIO_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, comercio_amount)],
         },
         fallbacks=[CommandHandler('cancel', nequi_cancel)],
+        allow_reentry=True  # Esto permite que el flujo se reinicie si se vuelve a seleccionar 'Nequi'
     )
 
     # Conversación para el flujo de Bancol a Nequi
@@ -60,6 +63,7 @@ if __name__ == '__main__':
             BANCOLOMBIA_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, bancol_amount)],
         },
         fallbacks=[CommandHandler('cancel', bancol_cancel)],
+        allow_reentry=True  # Esto permite que el flujo se reinicie si se vuelve a seleccionar 'Bancol a Nequi'
     )
 
     # Añadir los manejadores de comandos y conversaciones
