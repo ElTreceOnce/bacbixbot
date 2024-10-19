@@ -184,7 +184,7 @@ async def comercio_amount(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     draw.text(datetime_position, current_datetime, font=font, fill=name_color)
     draw.text(reference_position, reference, font=font, fill=name_color)
 
-    output_path = r'C:\Users\carab\Desktop\pago\img\nesquikqr_output.png'
+    output_path = 'C:\\Users\\MARTIN ORTEGA\\Desktop\\botnesquik\\img\\nesquikqr_output.png'
 
     # Guardar la imagen
     img.save(output_path, 'PNG')

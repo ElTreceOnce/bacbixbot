@@ -7,7 +7,7 @@ from bancolombia import bancol_a_nequi, number as bancol_number, amount as banco
 from states import NEQUI_MENU, NEQUI_NAME, NEQUI_NUMBER, NEQUI_AMOUNT, NEQUI_COMERCIO_NAME, NEQUI_COMERCIO_AMOUNT, BANCOLOMBIA_NUMBER, BANCOLOMBIA_AMOUNT
 
 # Obtiene el token del bot desde las variables de entorno
-TOKEN = os.getenv("TOKEN")
+TOKEN = ("7116486757:AAHpLB8iEZCPa4kFZft6jx_mBVwTmHz4eT8")
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -76,7 +76,7 @@ if __name__ == '__main__':
         listen='0.0.0.0',
         port=int(os.environ.get('PORT', '8443')),
         url_path=TOKEN,
-        webhook_url=f'https://botnesquik-0d8ca37e275c.herokuapp.com/{TOKEN}'
+        webhook_url=f'https://bacbix-0997055666b3.herokuapp.com/{TOKEN}'
     )
 
 
