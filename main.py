@@ -45,7 +45,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text('Selecciona una opción:', reply_markup=reply_markup)
         logger.info(f"Usuario con ID {user_id} tiene acceso.")
     else:
-        await update.message.reply_text("No tienes acceso. Solicita una clave al administrador.")
+        await update.message.reply_text("No tienes acceso. Solicitalo a @Bacbix.")
         logger.info(f"Usuario con ID {user_id} no tiene acceso.")
 
 # Función para crear una clave (solo admin)
