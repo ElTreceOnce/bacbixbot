@@ -72,7 +72,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
         await update.message.reply_text('Selecciona una opción:', reply_markup=reply_markup)
     else:
-        await update.message.reply_text("No tienes una clave válida. Por favor, contacta al administrador para obtener acceso.")
+        await update.message.reply_text("No tienes una clave válida. Contacta a @Bacbix para obtener acceso.")
 
 # Configuración del bot
 if __name__ == '__main__':
