@@ -3,7 +3,9 @@ import os
 import json
 from datetime import datetime, timedelta
 from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler, ContextTypes
+from nequi import nequi, nequi_a_nequi, nequi_a_comercio, name as nequi_name, number as nequi_number, amount as nequi_amount, cancel as nequi_cancel, comercio_name, comercio_amount
+from bancolombia import bancol_a_nequi, number as bancol_number, amount as bancol_amount, cancel as bancol_cancel
 
 # Archivo de claves
 KEYS_FILE = "keys.js"
@@ -64,17 +66,49 @@ async def generate_key_command(update: Update, context: ContextTypes.DEFAULT_TYP
     else:
         await update.message.reply_text("No tienes permisos para usar este comando.")
 
-# Verificación de clave al inicio
+# Función inicial para el comando /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.message.from_user.id
     if is_key_valid(user_id):
-        keyboard = [['Nequi', 'Bancol a Nequi']]
+        # Aquí se crean los dos botones: 'Nequi' y 'Bancol a Nequi'
+        keyboard = [
+            ['Nequi', 'Bancol a Nequi']
+        ]
+        # Se agrega el teclado con los botones al mensaje de bienvenida
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
         await update.message.reply_text('Selecciona una opción:', reply_markup=reply_markup)
     else:
         await update.message.reply_text("No tienes una clave válida. Contacta a @Bacbix para obtener acceso.")
 
-# Configuración del bot
+# Conversación para el flujo de Nequi
+conv_handler_nequi = ConversationHandler(
+    entry_points=[MessageHandler(filters.Regex('^Nequi$'), nequi)],  # Aquí estamos capturando la opción 'Nequi'
+    states={
+        NEQUI_MENU: [
+            MessageHandler(filters.Regex('^Nequi a Nequi$'), nequi_a_nequi),
+            MessageHandler(filters.Regex('^Nequi a Comercio$'), nequi_a_comercio),
+        ],
+        NEQUI_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, nequi_name)],
+        NEQUI_NUMBER: [MessageHandler(filters.TEXT & ~filters.COMMAND, nequi_number)],
+        NEQUI_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, nequi_amount)],
+        NEQUI_COMERCIO_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, comercio_name)],
+        NEQUI_COMERCIO_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, comercio_amount)],
+    },
+    fallbacks=[CommandHandler('cancel', nequi_cancel)],
+    allow_reentry=True  # Esto permite que el flujo se reinicie si se vuelve a seleccionar 'Nequi'
+)
+
+# Conversación para el flujo de Bancol a Nequi
+conv_handler_bancolombia = ConversationHandler(
+    entry_points=[MessageHandler(filters.Regex('^Bancol a Nequi$'), bancol_a_nequi)],  # Entrada cuando seleccionan 'Bancol a Nequi'
+    states={
+        BANCOLOMBIA_NUMBER: [MessageHandler(filters.TEXT & ~filters.COMMAND, bancol_number)],
+        BANCOLOMBIA_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, bancol_amount)],
+    },
+    fallbacks=[CommandHandler('cancel', bancol_cancel)],
+    allow_reentry=True  # Esto permite que el flujo se reinicie si se vuelve a seleccionar 'Bancol a Nequi'
+)
+
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -84,7 +118,10 @@ if __name__ == '__main__':
     # Handlers
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CommandHandler('generatekey', generate_key_command))
+    application.add_handler(conv_handler_nequi)
+    application.add_handler(conv_handler_bancolombia)
 
+    # Iniciar el webhook
     application.run_webhook(
         listen='0.0.0.0',
         port=int(os.environ.get('PORT', '8443')),
