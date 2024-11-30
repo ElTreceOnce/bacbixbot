@@ -89,5 +89,5 @@ if __name__ == '__main__':
         listen='0.0.0.0',
         port=int(os.environ.get('PORT', '8443')),
         url_path=TOKEN,
-        webhook_url=f'https://bacbix-0997055666b3.herokuapp.com/{TOKEN}'
+        webhook_url=f'https://bacbix-10b478738eaf.herokuapp.com/{TOKEN}'
     )
