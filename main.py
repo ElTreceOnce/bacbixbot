@@ -8,6 +8,9 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 # Archivo de claves
 KEYS_FILE = "keys.js"
 
+# ID del administrador
+ADMIN_ID = 1415509092  # Este es el ID del admin que puede asignar claves
+
 # Cargar claves desde el archivo .js
 def load_keys():
     if not os.path.exists(KEYS_FILE):
@@ -48,15 +51,14 @@ def is_key_valid(user_id: int) -> bool:
 
 # Comando para generar claves (solo para el administrador)
 async def generate_key_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    admin_id = 123456789  # Reemplaza con tu ID de Telegram
-    if update.message.from_user.id == admin_id:
+    if update.message.from_user.id == ADMIN_ID:  # Verifica que el usuario sea el administrador
         if len(context.args) != 1:
             await update.message.reply_text("Uso: /generatekey <user_id>")
             return
         try:
             user_id = int(context.args[0])
             new_key = generate_key(user_id)
-            await update.message.reply_text(f"Clave generada: {new_key}")
+            await update.message.reply_text(f"Clave generada para el usuario {user_id}: {new_key}")
         except Exception as e:
             await update.message.reply_text(f"Error generando clave: {e}")
     else:
@@ -87,5 +89,5 @@ if __name__ == '__main__':
         listen='0.0.0.0',
         port=int(os.environ.get('PORT', '8443')),
         url_path=TOKEN,
-        webhook_url=f'https://bacbix-10b478738eaf.herokuapp.com/{TOKEN}'
+        webhook_url=f'https://bacbix-0997055666b3.herokuapp.com/{TOKEN}'
     )
