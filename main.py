@@ -70,7 +70,7 @@ async def command_with_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         # Lógica para los comandos que se ejecutan solo si el usuario tiene una clave
         await update.message.reply_text(f"Comando ejecutado con éxito. Tu clave es {user_keys[user_id]}")
     else:
-        await update.message.reply_text("No tienes acceso. Solicita una clave al administrador.")
+        await update.message.reply_text("No tienes acceso. Solicitalo a @Bacbix.")
 
 if __name__ == '__main__':
     logger.info("Iniciando el bot")
