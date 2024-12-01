@@ -18,7 +18,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-# El ID del administrador que puede crear claves
+# El ID del administrador que puede crear y eliminar claves
 ADMIN_ID = 1415509092
 
 # Diccionario para almacenar las claves de los usuarios
@@ -45,7 +45,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text('Selecciona una opción:', reply_markup=reply_markup)
         logger.info(f"Usuario con ID {user_id} tiene acceso.")
     else:
-        await update.message.reply_text("No tienes acceso. Solicitalo a @Bacbix.")
+        await update.message.reply_text("No tienes acceso. Solicítalo a @Bacbix.")
         logger.info(f"Usuario con ID {user_id} no tiene acceso.")
 
 # Función para crear una clave (solo admin)
@@ -61,7 +61,7 @@ async def create_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             await update.message.reply_text("Por favor, proporciona el ID del usuario al que se le asignará la clave.")
     else:
         await update.message.reply_text("No tienes permisos para generar una clave.")
-        logger.warning("Usuario sin permisos intentó generar una clave")
+        logger.warning("Usuario sin permisos intentó generar una clave.")
 
 # Función para eliminar una clave (solo admin)
 async def remove_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -69,16 +69,15 @@ async def remove_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         if context.args:
             user_id = int(context.args[0])  # El ID del usuario cuya clave será eliminada
             if user_id in user_keys:
-                del user_keys[user_id]  # Eliminar la clave del usuario
-                await update.message.reply_text(f"Clave eliminada para el usuario {user_id}.")
-                logger.info(f"Clave eliminada para el usuario {user_id} por el admin.")
+                del user_keys[user_id]  # Eliminar la clave del diccionario
+                await update.message.reply_text(f"Clave del usuario {user_id} eliminada con éxito.")
+                logger.info(f"Clave del usuario {user_id} eliminada por el admin.")
             else:
-                await update.message.reply_text(f"El usuario {user_id} no tiene una clave registrada.")
-                logger.warning(f"Intento de eliminar una clave para un usuario no registrado: {user_id}.")
+                await update.message.reply_text(f"El usuario {user_id} no tiene una clave asignada.")
         else:
             await update.message.reply_text("Por favor, proporciona el ID del usuario cuya clave deseas eliminar.")
     else:
-        await update.message.reply_text("No tienes permisos para eliminar una clave.")
+        await update.message.reply_text("No tienes permisos para eliminar claves.")
         logger.warning("Usuario sin permisos intentó eliminar una clave.")
 
 # Función para los comandos que requieren clave
@@ -88,27 +87,21 @@ async def command_with_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         # Lógica para los comandos que se ejecutan solo si el usuario tiene una clave
         await update.message.reply_text(f"Comando ejecutado con éxito. Tu clave es {user_keys[user_id]}")
     else:
-        await update.message.reply_text("No tienes acceso. Solicitalo a @Bacbix.")
+        await update.message.reply_text("No tienes acceso. Solicítalo a @Bacbix.")
 
 if __name__ == '__main__':
     logger.info("Iniciando el bot")
     application = ApplicationBuilder().token(TOKEN).build()
 
-    # Manejador para el comando /start
+    # Manejadores de comandos
     start_handler = CommandHandler('start', start)
-
-    # Manejador para el comando /create_key (solo admin)
     create_key_handler = CommandHandler('create_key', create_key)
-
-    # Manejador para los comandos con clave
+    remove_key_handler = CommandHandler('removekey', remove_key)
     command_handler = CommandHandler('command_with_key', command_with_key)
-
-    # Manejador para el comando /remove_key (solo admin)
-    remove_key_handler = CommandHandler('remove_key', remove_key)
 
     # Conversación para el flujo de Nequi
     conv_handler_nequi = ConversationHandler(
-        entry_points=[MessageHandler(filters.Regex('^Nequi$'), nequi)],  # Aquí estamos capturando la opción 'Nequi'
+        entry_points=[MessageHandler(filters.Regex('^Nequi$'), nequi)],
         states={
             NEQUI_MENU: [
                 MessageHandler(filters.Regex('^Nequi a Nequi$'), nequi_a_nequi),
@@ -121,24 +114,25 @@ if __name__ == '__main__':
             NEQUI_COMERCIO_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, comercio_amount)],
         },
         fallbacks=[CommandHandler('cancel', nequi_cancel)],
-        allow_reentry=True  # Esto permite que el flujo se reinicie si se vuelve a seleccionar 'Nequi'
+        allow_reentry=True
     )
 
     # Conversación para el flujo de Bancol a Nequi
     conv_handler_bancolombia = ConversationHandler(
-        entry_points=[MessageHandler(filters.Regex('^Bancol a Nequi$'), bancol_a_nequi)],  # Entrada cuando seleccionan 'Bancol a Nequi'
+        entry_points=[MessageHandler(filters.Regex('^Bancol a Nequi$'), bancol_a_nequi)],
         states={
             BANCOLOMBIA_NUMBER: [MessageHandler(filters.TEXT & ~filters.COMMAND, bancol_number)],
             BANCOLOMBIA_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, bancol_amount)],
         },
         fallbacks=[CommandHandler('cancel', bancol_cancel)],
-        allow_reentry=True  # Esto permite que el flujo se reinicie si se vuelve a seleccionar 'Bancol a Nequi'
+        allow_reentry=True
     )
 
     # Añadir los manejadores de comandos y conversaciones
     application.add_handler(start_handler)
-    application.add_handler(create_key_handler)  # Agregar el manejador para el comando /create_key
-    application.add_handler(command_handler)  # Agregar el manejador para los comandos con clave
+    application.add_handler(create_key_handler)
+    application.add_handler(remove_key_handler)
+    application.add_handler(command_handler)
     application.add_handler(conv_handler_nequi)
     application.add_handler(conv_handler_bancolombia)
 
