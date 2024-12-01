@@ -63,6 +63,24 @@ async def create_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         await update.message.reply_text("No tienes permisos para generar una clave.")
         logger.warning("Usuario sin permisos intentó generar una clave")
 
+# Función para eliminar una clave (solo admin)
+async def remove_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.message.from_user.id == ADMIN_ID:
+        if context.args:
+            user_id = int(context.args[0])  # El ID del usuario cuya clave será eliminada
+            if user_id in user_keys:
+                del user_keys[user_id]  # Eliminar la clave del usuario
+                await update.message.reply_text(f"Clave eliminada para el usuario {user_id}.")
+                logger.info(f"Clave eliminada para el usuario {user_id} por el admin.")
+            else:
+                await update.message.reply_text(f"El usuario {user_id} no tiene una clave registrada.")
+                logger.warning(f"Intento de eliminar una clave para un usuario no registrado: {user_id}.")
+        else:
+            await update.message.reply_text("Por favor, proporciona el ID del usuario cuya clave deseas eliminar.")
+    else:
+        await update.message.reply_text("No tienes permisos para eliminar una clave.")
+        logger.warning("Usuario sin permisos intentó eliminar una clave.")
+
 # Función para los comandos que requieren clave
 async def command_with_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.message.from_user.id
