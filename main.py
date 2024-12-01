@@ -103,6 +103,9 @@ if __name__ == '__main__':
     # Manejador para los comandos con clave
     command_handler = CommandHandler('command_with_key', command_with_key)
 
+    # Manejador para el comando /remove_key (solo admin)
+    remove_key_handler = CommandHandler('remove_key', remove_key)
+
     # Conversación para el flujo de Nequi
     conv_handler_nequi = ConversationHandler(
         entry_points=[MessageHandler(filters.Regex('^Nequi$'), nequi)],  # Aquí estamos capturando la opción 'Nequi'
