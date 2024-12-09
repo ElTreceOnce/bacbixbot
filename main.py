@@ -21,12 +21,13 @@ ADMIN_ID = 1415509092
 
 # Diccionario manual con las claves de los usuarios
 user_keys = {
-    7944412660: "claveusuario1",  # Usuario con clave
-    8090673440: "claveusuario2",   # Otro usuario con clave
-    6929246709: "claveusuario3",
-    5649756349: "claveusuario4",
-    7432216285: "claveusuario5",
-    1415509092: "claveusuario6"
+    7944412660: "antonimercado",  # Usuario con clave
+    8090673440: "nosoyejemplo",   # Otro usuario con clave
+    6929246709: "$$$",
+    5649756349: "privado",
+    7432216285: "thanks",
+    1415509092: "yo",
+    7598290138: "luislopez"
     # Agrega los usuarios que necesites con sus claves aquí
 }
 
