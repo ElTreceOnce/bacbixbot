@@ -48,6 +48,27 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text("No tienes acceso. Solicítalo a @Bacbix.")
         logger.info(f"Usuario con ID {user_id} no tiene acceso.")
 
+# Función para el comando /msg
+async def send_msg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    user_id = update.message.from_user.id
+    if user_id in user_keys:
+        # Verificar si se proporciona un mensaje en los argumentos
+        if context.args:
+            message = " ".join(context.args)  # Unir todos los argumentos del mensaje
+            # Enviar el mensaje a todos los usuarios en user_keys
+            for uid in user_keys:
+                try:
+                    await context.bot.send_message(uid, message)
+                    logger.info(f"Mensaje enviado a {uid}.")
+                except Exception as e:
+                    logger.error(f"No se pudo enviar mensaje a {uid}: {e}")
+            await update.message.reply_text(f"Mensaje enviado a todos los usuarios.")
+        else:
+            await update.message.reply_text("Por favor, proporciona el mensaje a enviar.")
+    else:
+        await update.message.reply_text("No tienes acceso. Solicítalo a @Bacbix.")
+        logger.info(f"Usuario con ID {user_id} no tiene acceso al comando /msg.")
+
 # Función para crear una clave (solo admin)
 async def create_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.message.from_user.id == ADMIN_ID:
@@ -98,6 +119,7 @@ if __name__ == '__main__':
     create_key_handler = CommandHandler('create_key', create_key)
     remove_key_handler = CommandHandler('removekey', remove_key)
     command_handler = CommandHandler('command_with_key', command_with_key)
+    send_msg_handler = CommandHandler('msg', send_msg)
 
     # Conversación para el flujo de Nequi
     conv_handler_nequi = ConversationHandler(
@@ -133,6 +155,7 @@ if __name__ == '__main__':
     application.add_handler(create_key_handler)
     application.add_handler(remove_key_handler)
     application.add_handler(command_handler)
+    application.add_handler(send_msg_handler)
     application.add_handler(conv_handler_nequi)
     application.add_handler(conv_handler_bancolombia)
 
