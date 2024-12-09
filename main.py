@@ -93,33 +93,6 @@ if __name__ == '__main__':
     logger.info("Iniciando el bot")
     application = ApplicationBuilder().token(TOKEN).build()
 
-# Función para el comando /msg (solo admin)
-async def msg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if update.message.from_user.id == ADMIN_ID:
-        if context.args:
-            # El mensaje que el admin quiere enviar
-            message = " ".join(context.args)
-            for user_id in user_keys:
-                try:
-                    # Enviar el mensaje a cada usuario
-                    await update.message.bot.send_message(user_id, message)
-                    logger.info(f"Mensaje enviado a {user_id}")
-                except Exception as e:
-                    logger.error(f"No se pudo enviar el mensaje a {user_id}: {e}")
-            await update.message.reply_text(f"Mensaje enviado a todos los usuarios.")
-        else:
-            await update.message.reply_text("Por favor, proporciona el mensaje que deseas enviar.")
-    else:
-        await update.message.reply_text("No tienes permisos para ejecutar este comando.")
-        logger.warning("Usuario sin permisos intentó ejecutar el comando /msg.")
-
-# Añadir el manejador de comando /msg
-msg_handler = CommandHandler('msg', msg)
-
-# Añadir el manejador de comando al bot
-application.add_handler(msg_handler)
-
-    
     # Manejadores de comandos
     start_handler = CommandHandler('start', start)
     create_key_handler = CommandHandler('create_key', create_key)
