@@ -1,7 +1,5 @@
 import logging
 import os
-import random
-import string
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler, ContextTypes
 from nequi import nequi, nequi_a_nequi, nequi_a_comercio, name as nequi_name, number as nequi_number, amount as nequi_amount, cancel as nequi_cancel, comercio_name, comercio_amount
@@ -21,15 +19,16 @@ logger = logging.getLogger(__name__)
 # El ID del administrador que puede crear y eliminar claves
 ADMIN_ID = 1415509092
 
-# Diccionario para almacenar las claves de los usuarios
-user_keys = {}
-
-# Función para crear una clave aleatoria
-def generate_key() -> str:
-    length = 16  # Longitud de la clave
-    characters = string.ascii_letters + string.digits  # Letras y números
-    key = ''.join(random.choice(characters) for _ in range(length))
-    return key
+# Diccionario manual con las claves de los usuarios
+user_keys = {
+    7944412660: "claveusuario1",  # Usuario con clave
+    8090673440: "claveusuario2",   # Otro usuario con clave
+    6929246709: "claveusuario3",
+    5649756349: "claveusuario4",
+    7432216285: "claveusuario5",
+    1415509092: "claveusuario6"
+    # Agrega los usuarios que necesites con sus claves aquí
+}
 
 # Función para el comando /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -53,12 +52,12 @@ async def create_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     if update.message.from_user.id == ADMIN_ID:
         if context.args:
             user_id = int(context.args[0])  # El ID del usuario a quien se le asignará la clave
-            new_key = generate_key()  # Generar una nueva clave
+            new_key = context.args[1]  # La clave que el admin quiere asignar
             user_keys[user_id] = new_key  # Asignar la clave al usuario
-            await update.message.reply_text(f"Clave generada y asignada al usuario {user_id}: {new_key}")
-            logger.info(f"Clave generada y asignada al usuario {user_id} por el admin.")
+            await update.message.reply_text(f"Clave '{new_key}' generada y asignada al usuario {user_id}.")
+            logger.info(f"Clave '{new_key}' generada y asignada al usuario {user_id} por el admin.")
         else:
-            await update.message.reply_text("Por favor, proporciona el ID del usuario al que se le asignará la clave.")
+            await update.message.reply_text("Por favor, proporciona el ID del usuario y la clave a asignar.")
     else:
         await update.message.reply_text("No tienes permisos para generar una clave.")
         logger.warning("Usuario sin permisos intentó generar una clave.")
