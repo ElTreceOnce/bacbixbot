@@ -26,7 +26,8 @@ user_keys = {
     6929246709: "$$$",
     5649756349: "privado",
     1415509092: "yo",
-    7598290138: "luislopez"
+    7598290138: "luislopez",
+    6559904822: "micaela"
     # Agrega los usuarios que necesites con sus claves aquí
 }
 
