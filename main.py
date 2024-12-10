@@ -25,7 +25,6 @@ user_keys = {
     8090673440: "nosoyejemplo",   # Otro usuario con clave
     6929246709: "$$$",
     5649756349: "privado",
-    7432216285: "thanks",
     1415509092: "yo",
     7598290138: "luislopez"
     # Agrega los usuarios que necesites con sus claves aquí
