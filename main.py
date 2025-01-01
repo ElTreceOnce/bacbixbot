@@ -24,11 +24,9 @@ user_keys = {
     7330673325: "antoniobanderas",
     5649756349: "privado",
     7720353544: "rutbam",
-    8090673440: "rayoazul",
     6929246709: "$$$",
     1415509092: "yo",
     7598290138: "luislopez",
-    6559904822: "micaela"
     # Agrega los usuarios que necesites con sus claves aquí
 }
 
