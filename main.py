@@ -21,10 +21,8 @@ ADMIN_ID = 1415509092
 
 # Diccionario manual con las claves de los usuarios
 user_keys = {
-    8090673440: "rayo"
-    5649756349: "privado",
+    8090673440: "rayo",
     7720353544: "rutbam",
-    6929246709: "$$$",
     1415509092: "yo",
     7598290138: "luislopez",
     # Agrega los usuarios que necesites con sus claves aquí
