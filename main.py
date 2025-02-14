@@ -7,7 +7,7 @@ from bancolombia import bancol_a_nequi, number as bancol_number, amount as banco
 from states import NEQUI_MENU, NEQUI_NAME, NEQUI_NUMBER, NEQUI_AMOUNT, NEQUI_COMERCIO_NAME, NEQUI_COMERCIO_AMOUNT, BANCOLOMBIA_NUMBER, BANCOLOMBIA_AMOUNT
 
 # Obtiene el token del bot desde las variables de entorno
-TOKEN = ("7116486757:AAHpLB8iEZCPa4kFZft6jx_mBVwTmHz4eT8")
+TOKEN = ("7775516545:AAFz3EhiKnfKRlEFZGvWXfl_BRfhn5ml1TA")
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
