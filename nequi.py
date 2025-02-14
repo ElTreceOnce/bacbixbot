@@ -63,14 +63,14 @@ async def amount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     # Aquí se manipula la imagen
     image_path = os.path.join(IMAGE_DIR, 'nequinuevo.jpg')
-    font_path = os.path.join(FONT_DIR, 'Nesquic.ttf')
+    font_path = os.path.join(FONT_DIR, 'Nesquic.ttf')s
     img = Image.open(image_path)
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(font_path, 47)
 
     # Características del texto
     name_color = (26, 3, 28)
-    name_position = (95, 508)
+    name_position = (50, 200)
     reference_position = (95, 690)
     number_position = (95, 874)
     datetime_position = (95, 1055)
