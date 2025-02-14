@@ -70,7 +70,7 @@ async def amount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     # Características del texto
     name_color = (26, 3, 28)
-    name_position = (50, 200)
+    name_position = (95, 508)
     reference_position = (95, 690)
     number_position = (95, 874)
     datetime_position = (95, 1055)
