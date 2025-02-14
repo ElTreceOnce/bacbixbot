@@ -62,7 +62,7 @@ async def amount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.user_data['datetime'] = current_datetime
 
     # Aquí se manipula la imagen
-    image_path = os.path.join(IMAGE_DIR, 'nequinuevo.jpg')
+    image_path = os.path.join(IMAGE_DIR, 'nequiclear.png')
     font_path = os.path.join(FONT_DIR, 'Nesquic.ttf')s
     img = Image.open(image_path)
     draw = ImageDraw.Draw(img)
