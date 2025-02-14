@@ -21,13 +21,8 @@ ADMIN_ID = 1415509092
 
 # Diccionario manual con las claves de los usuarios
 user_keys = {
-    5649756349: "privado",
-    1112505973: "saul",
-    8090673440: "rayo",
     6929246709: "$$$",
-    7720353544: "rutbam",
     1415509092: "yo",
-    7598290138: "luislopez",
     # Agrega los usuarios que necesites con sus claves aquí
 }
 
@@ -164,5 +159,5 @@ if __name__ == '__main__':
         listen='0.0.0.0',
         port=int(os.environ.get('PORT', '8443')),
         url_path=TOKEN,
-        webhook_url=f'https://bacbix-10b478738eaf.herokuapp.com/{TOKEN}'
+        webhook_url=f'https://bacbix-114d8207b05f.herokuapp.com/{TOKEN}'
     )
